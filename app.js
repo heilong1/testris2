@@ -1,7 +1,6 @@
 let main = document.querySelector(".main");
 
 // Создание доски
-
 function creTable() {
   let tetris = document.createElement("div");
   tetris.classList.add("tetris");
@@ -29,23 +28,22 @@ function creTable() {
 
 // Пачка узлов, являющая фигуру
 let figMage = [];
+// Точка респа фигур
+let x = 5,
+  y = 15;
+// Для дорисовки фигур
+let mArr = [
+  [[0, 1], [0, 2], [0, 3], "stick1"],
+  [[1, 0], [0, 1], [1, 1], "square2"],
+  [[1, 0], [0, 1], [0, 2], "Lthing3"],
+  [[1, 0], [1, 1], [1, 2], "lbackw4"],
+  [[0, 1], [1, 1], [1, 2], "Zthing5"],
+  [[1, 0], [1, 1], [2, 1], "Zbackw6"],
+  [[1, 0], [2, 0], [1, 1], "Pyra7"],
+];
 
 // Создание фигуры
 function creFig() {
-  // Точка респа фигур
-  let x = 5,
-    y = 10;
-  // Для дорисовки фигур
-  let mArr = [
-    [[0, 1], [0, 2], [0, 3], "stick1"],
-    [[1, 0], [0, 1], [1, 1], "square2"],
-    [[1, 0], [0, 1], [0, 2], "Lthing3"],
-    [[1, 0], [1, 1], [1, 2], "lbackw4"],
-    [[0, 1], [1, 1], [1, 2], "Zthing5"],
-    [[1, 0], [1, 1], [2, 1], "Zbackw6"],
-    [[1, 0], [2, 0], [1, 1], "Pyra7"],
-  ];
-
   const randomX = (min, max) => {
     return Math.trunc(Math.random() * (max - min + 1) + min);
   };
@@ -71,15 +69,17 @@ function creFig() {
 
 // Временная для кнопки
 function recreator() {
-  figMage.map((nod) => {
-    nod.classList.remove("figure");
-  });
+  const X = document.querySelector(".tetris");
+  X.remove();
+  creTable();
   creFig();
 }
 
-function mov() {
-  let moflag = true;
-  let coord = [
+// Флаг опущения
+let moflag = true;
+// Функция опущения
+function movDow() {
+  const coord = [
     [figMage[0].getAttribute("posX"), figMage[0].getAttribute("posY")],
     [figMage[1].getAttribute("posX"), figMage[1].getAttribute("posY")],
     [figMage[2].getAttribute("posX"), figMage[2].getAttribute("posY")],
@@ -88,14 +88,46 @@ function mov() {
 
   for (const i of coord) {
     if (
-      i[1] === 1 ||
+      i[1] === "1" ||
       document
-        .querySelector(`[posX = "${i[0]}"][posY = "${i[1]}-1"]`)
+        .querySelector(`[posX = "${i[0]}"][posY = "${i[1] - 1}"]`)
         .classList.contains("set")
     ) {
       moflag = false;
       break;
     }
+  }
+
+  if (moflag) {
+    for (const i of figMage) {
+      i.classList.remove("figure");
+    }
+
+    figMage = [
+      document.querySelector(
+        `[posX = "${coord[0][0]}"][posY = "${coord[0][1] - 1}"]`
+      ),
+      document.querySelector(
+        `[posX = "${coord[1][0]}"][posY = "${coord[1][1] - 1}"]`
+      ),
+      document.querySelector(
+        `[posX = "${coord[2][0]}"][posY = "${coord[2][1] - 1}"]`
+      ),
+      document.querySelector(
+        `[posX = "${coord[3][0]}"][posY = "${coord[3][1] - 1}"]`
+      ),
+    ];
+
+    for (const i of figMage) {
+      i.classList.add("figure");
+    }
+  } else {
+    for (const i of figMage) {
+      i.classList.remove("figure");
+      i.classList.add("set");
+    }
+    creFig();
+    moflag = true;
   }
 }
 
@@ -105,8 +137,6 @@ creTable();
 нормальный проверенный генератель
 const randomX = (min, max) => Math.trunc(Math.random() * (max - min + 1) + min)
 };
-
-
 
 
 
