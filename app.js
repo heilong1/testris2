@@ -132,6 +132,15 @@ function movDow() {
 }
 
 creTable();
+creFig();
+
+let interv = setInterval(() => {
+  movDow()
+},1000)
+
+window.addEventListener('keydown', function (e) {
+  
+})
 
 /*
 нормальный проверенный генератель
