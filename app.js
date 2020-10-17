@@ -75,10 +75,9 @@ function recreator() {
   creFig();
 }
 
-// Флаг опущения
-let moflag = true;
 // Функция опущения
 function movDow() {
+  let moflag = true;
   const coord = [
     [figMage[0].getAttribute("posX"), figMage[0].getAttribute("posY")],
     [figMage[1].getAttribute("posX"), figMage[1].getAttribute("posY")],
@@ -131,16 +130,61 @@ function movDow() {
   }
 }
 
+// ________Программа
 creTable();
 creFig();
 
 let interv = setInterval(() => {
-  movDow()
-},1000)
+  movDow();
+}, 1000);
 
-window.addEventListener('keydown', function (e) {
-  
-})
+// Слушатель нажатия стрелки
+window.addEventListener("keydown", function (e) {
+  let flag = true;
+
+  let cor1 = [figMage[0].getAttribute("posX"), figMage[0].getAttribute("posY")];
+  let cor2 = [figMage[1].getAttribute("posX"), figMage[1].getAttribute("posY")];
+  let cor3 = [figMage[2].getAttribute("posX"), figMage[2].getAttribute("posY")];
+  let cor4 = [figMage[3].getAttribute("posX"), figMage[3].getAttribute("posY")];
+
+  function getNewState(a) {
+    // пробная фигура для порта влево и вправо анализ пустоты
+    let figNew = [
+      document.querySelector(`[posX = "${+cor1[0] + a}"][posY = "${cor1[1]}"]`),
+      document.querySelector(`[posX = "${+cor2[0] + a}"][posY = "${cor2[1]}"]`),
+      document.querySelector(`[posX = "${+cor3[0] + a}"][posY = "${cor3[1]}"]`),
+      document.querySelector(`[posX = "${+cor4[0] + a}"][posY = "${cor4[1]}"]`),
+    ];
+    // проверка пустоты
+    for (const i of figNew) {
+      if (!i || i.classList.contains("set")) {
+        flag = false;
+        break;
+      }
+    }
+    // проверка флага и запись
+    if (flag) {
+      for (const i of figMage) {
+        i.classList.remove("figure");
+      }
+      figMage = figNew;
+      for (const i of figMage) {
+        i.classList.add("figure");
+      }
+    }
+  }
+
+  // проверка кнопки, запуск движения
+  if (e.key == "ArrowLeft") {
+    getNewState(-1);
+  } else if (e.key == "ArrowRight") {
+    getNewState(1);
+  } else if (e.key == "ArrowDown") {
+    movDow()
+  } else if (e.key == "Enter") {
+    recreator()
+  }
+});
 
 /*
 нормальный проверенный генератель
