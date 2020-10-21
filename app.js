@@ -1,6 +1,6 @@
 let main = document.querySelector(".main");
 
-// Создание доски
+// __________________Создание доски
 function creTable() {
   let tetris = document.createElement("div");
   tetris.classList.add("tetris");
@@ -26,270 +26,88 @@ function creTable() {
   }
 }
 
+// Рандомизатор
+const randomX = (min, max) => {
+  return Math.trunc(Math.random() * (max - min + 1) + min);
+};
+
 // Пачка узлов, являющая фигуру
 let figMage = [];
-// Точка респа фигур
-let x = 5,
-  y = 15;
-// Для дорисовки фигур
-let mArr = [
-  [
-    [0, 1],
-    [0, 2],
-    [0, 3],
-    "stick1",
-    [
-      // 90гр
-      [-1, 1],
-      [0, 0],
-      [1, -1],
-      [2, -2],
-    ],
-    [
-      // 180гр
-      [1, -1],
-      [0, 0],
-      [-1, 1],
-      [-2, 2],
-    ],
-    [
-      // 270гр
-      [-1, 1],
-      [0, 0],
-      [1, -1],
-      [2, -2],
-    ],
-    [
-      // 360гр
-      [1, -1],
-      [0, 0],
-      [-1, 1],
-      [-2, 2],
-    ],
-  ],
-  [
-    [1, 0],
-    [0, 1],
-    [1, 1],
-    "square2",
-    [
-      // 90гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-    [
-      // 180гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-    [
-      // 270гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-    [
-      // 360гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-  ],
-  [
-    [1, 0],
-    [0, 1],
-    [0, 2],
-    "Lthing3",
-    [
-      // 90гр
-      [1, 0],
-      [0, 0],
-      [-1, 1],
+
+// Массив фигур объектный тип
+const figArr = [
+  {
+    id: "stick",
+    fnew: [
       [0, 1],
+      [0, 2],
+      [0, 3],
     ],
-    [
-      // 180гр
-      [-2, 0],
-      [0, 0],
-      [1, 1],
-      [-1, -1],
-    ],
-    [
-      // 270гр
-      [0, -1],
-      [0, 0],
-      [1, -1],
-      [-1, -1],
-    ],
-    [
-      // 360гр
-      [1, 1],
-      [0, 0],
-      [-1, -1],
+  },
+  {
+    id: "square",
+    fnew: [
       [1, 0],
-    ],
-  ],
-  [
-    [1, 0],
-    [1, 1],
-    [1, 2],
-    "lbackw4",
-    [
-      // 90гр
-      [-1, -1],
-      [0, 0],
+      [0, 1],
       [1, 1],
-      [2, 0],
     ],
-    [
-      // 180гр
-      [1, -1],
-      [0, 0],
-      [-1, 1],
+  },
+  {
+    id: "Lthing",
+    fnew: [
+      [1, 0],
+      [0, 1],
       [0, 2],
     ],
-    [
-      // 270гр
+  },
+  {
+    id: "lbackw",
+    fnew: [
+      [1, 0],
       [1, 1],
-      [0, 0],
-      [-1, -1],
-      [-2, 0],
+      [1, 2],
     ],
-    [
-      // 360гр
+  },
+
+  {
+    id: "Zthing",
+    fnew: [
+      [1, 0],
+      [0, 1],
       [-1, 1],
-      [0, 0],
-      [1, -1],
-      [0, -2],
     ],
-  ],
-  [
-    [0, 1],
-    [1, 1],
-    [1, 2],
-    "Zthing5",
-    [
-      // 90гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
+  },
+  {
+    id: "Zbackw",
+    fnew: [
+      [1, 0],
+      [1, 1],
+      [2, 1],
     ],
-    [
-      // 180гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
+  },
+  {
+    id: "Pyra",
+    fnew: [
+      [1, 0],
+      [2, 0],
+      [1, 1],
     ],
-    [
-      // 270гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-    [
-      // 360гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-  ],
-  [
-    [1, 0],
-    [1, 1],
-    [2, 1],
-    "Zbackw6",
-    [
-      // 90гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-    [
-      // 180гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-    [
-      // 270гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-    [
-      // 360гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-  ],
-  [
-    [1, 0],
-    [2, 0],
-    [1, 1],
-    "Pyra7",
-    [
-      // 90гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-    [
-      // 180гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-    [
-      // 270гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-    [
-      // 360гр
-      [0, 0],
-      [0, 0],
-      [0, 0],
-      [0, 0],
-    ],
-  ],
+  },
 ];
 
 // Создание фигуры
-function creFig() {
-  const randomX = (min, max) => {
-    return Math.trunc(Math.random() * (max - min + 1) + min);
-  };
-
-  let curFig = mArr[randomX(0, 3)];
+function creFig(num, x, y) {
+  let curFig = figArr[num];
   figMage = [
     document.querySelector(`[posX = "${x}"][posY = "${y}"]`),
     document.querySelector(
-      `[posX = "${x + curFig[0][0]}"][posY = "${y + curFig[0][1]}"]`
+      `[posX = "${x + curFig.fnew[0][0]}"][posY = "${y + curFig.fnew[0][1]}"]`
     ),
     document.querySelector(
-      `[posX = "${x + curFig[1][0]}"][posY = "${y + curFig[1][1]}"]`
+      `[posX = "${x + curFig.fnew[1][0]}"][posY = "${y + curFig.fnew[1][1]}"]`
     ),
     document.querySelector(
-      `[posX = "${x + curFig[2][0]}"][posY = "${y + curFig[2][1]}"]`
+      `[posX = "${x + curFig.fnew[2][0]}"][posY = "${y + curFig.fnew[2][1]}"]`
     ),
   ];
 
@@ -298,15 +116,45 @@ function creFig() {
   });
 }
 
-// Временная для кнопки
-function recreator() {
-  const X = document.querySelector(".tetris");
-  X.remove();
+// ___________________Финал
+// Удалить и создать доску, очистить интервал и мовер.
+// Нарисовать рожу.
+function pressF() {
+  delTable();
   creTable();
-  creFig();
+  clearInterval(interv);
+  window.removeEventListener("keydown", mover);
+  creFig(6, 2, 10);
+  creFig(6, 7, 10);
+  creFig(2, 5, 6);
+  creFig(1, 5, 3);
+  creFig(4, 3, 4);
+  creFig(5, 7, 4);
 }
 
-// Функция опущения
+// _________________Удалить доску
+function delTable() {
+  const X = document.querySelector(".tetris");
+  X.remove();
+}
+
+// _________________Рестарт игры
+// Удалить и создать доску
+// После финала мовер и интервал не создаются!!!!!!!!!!!!!
+// Мовер то бишь работать будет, а инт множится.
+function recreator() {
+  delTable();
+  creTable();
+  creFig(randomX(0, 6), 5, 15);
+}
+
+// __________________Пауза____Доделать!!!!!!!!!!!!!!!!!!!!
+function gamPause() {
+  clearInterval(interv);
+  window.removeEventListener("keydown", mover);
+}
+
+// _______________________Функция опущения_______________
 function movDow() {
   let moflag = true;
   const coord = [
@@ -356,22 +204,34 @@ function movDow() {
       i.classList.remove("figure");
       i.classList.add("set");
     }
-    creFig();
+
+    // Если фигура встала за рамкой, финал
+    const upSet = [];
+    for (let i = 1; i < 11; i++) {
+      upSet.push(document.querySelector(`[posX = "${i}"][posY = "16"]`));
+    }
+    for (const i of upSet) {
+      if (i.classList.contains("set")) pressF();
+    }
+
+    creFig(randomX(0, 6), 5, 15);
     moflag = true;
   }
 }
 
-// ________Программа
+// ____________________Программа_____________________________
+// Создать доску, создать фигуру, запустить интервал
+// Сделать так, чтобы начиналось с рожи, и старт по ентеру!!!!!!!!!!
 creTable();
-creFig();
+creFig(randomX(0, 6), 5, 15);
 
 let interv = setInterval(() => {
   movDow();
 }, 1000);
 
-// Слушатель нажатия стрелки
-window.addEventListener("keydown", function (e) {
-  
+// __________________________________________________________
+// ________________Слушатель нажатия стрелки
+const mover = (e) => {
   let rot = 1;
 
   let cor1 = [figMage[0].getAttribute("posX"), figMage[0].getAttribute("posY")];
@@ -445,18 +305,25 @@ window.addEventListener("keydown", function (e) {
     getRot();
   } else if (e.code == "Space") {
     movDow();
-  } else if (e.code == "Enter") {
-    recreator();
+  } else if (e.code == "Escape") {
+    pressF();
+  } else if (e.code == "KeyP") {
+    gamPause();
   }
   // Временно поиск кодов кнопок!
   console.log(e.code);
+};
+
+// ______________________Слушатель движения____________________
+window.addEventListener("keydown", mover);
+
+// _____________________Слушатель рестарта_____________________
+window.addEventListener("keydown", function (e) {
+  if (e.code == "Enter") {
+    recreator();
+  }
 });
 
 /*
-нормальный проверенный генератель
-const randomX = (min, max) => Math.trunc(Math.random() * (max - min + 1) + min)
-};
-
-
 
 */
