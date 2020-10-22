@@ -140,15 +140,18 @@ function delTable() {
 
 // _________________Рестарт игры
 // Удалить и создать доску
+// Если не юзать финал, рестарт сохранит мовер и интервал
 // После финала мовер и интервал не создаются!!!!!!!!!!!!!
-// Мовер то бишь работать будет, а инт множится.
+// Мовер то бишь работать будет, а инт множится. решить!!!!!!!!!
 function recreator() {
+  pressF();
   delTable();
   creTable();
   creFig(randomX(0, 6), 5, 15);
 }
 
 // __________________Пауза____Доделать!!!!!!!!!!!!!!!!!!!!
+// Или лучше в работе слушателя, думать.
 function gamPause() {
   clearInterval(interv);
   window.removeEventListener("keydown", mover);
@@ -212,27 +215,17 @@ function movDow() {
     }
     for (const i of upSet) {
       if (i.classList.contains("set")) pressF();
+      else {
+        creFig(randomX(0, 6), 5, 15);
+        moflag = true;
+      }
     }
-
-    creFig(randomX(0, 6), 5, 15);
-    moflag = true;
   }
 }
-
-// ____________________Программа_____________________________
-// Создать доску, создать фигуру, запустить интервал
-// Сделать так, чтобы начиналось с рожи, и старт по ентеру!!!!!!!!!!
-creTable();
-creFig(randomX(0, 6), 5, 15);
-
-let interv = setInterval(() => {
-  movDow();
-}, 1000);
 
 // __________________________________________________________
 // ________________Слушатель нажатия стрелки
 const mover = (e) => {
-  let rot = 1;
 
   let cor1 = [figMage[0].getAttribute("posX"), figMage[0].getAttribute("posY")];
   let cor2 = [figMage[1].getAttribute("posX"), figMage[1].getAttribute("posY")];
@@ -267,8 +260,9 @@ const mover = (e) => {
     }
   }
 
+  let rot = 1;
   // Поворот недоработан!!!!
-  function getRot() {
+  function getRot(a) {
     let flag = true;
     // пробная фигура для порта влево и вправо анализ пустоты
     let figNew = [
@@ -302,8 +296,10 @@ const mover = (e) => {
   } else if (e.code == "ArrowRight") {
     getNewState(1);
   } else if (e.code == "ArrowUp") {
-    getRot();
-  } else if (e.code == "Space") {
+    getRot(1);
+  } else if (e.code == "ArrowDown") {
+    getRot(-1);
+  }else if (e.code == "Space") {
     movDow();
   } else if (e.code == "Escape") {
     pressF();
@@ -314,15 +310,27 @@ const mover = (e) => {
   console.log(e.code);
 };
 
-// ______________________Слушатель движения____________________
+
+// ____________________Программа_____________________________
+// Создать доску, создать фигуру, запустить интервал
+// Сделать так, чтобы начиналось с рожи, и старт по ентеру!!!!!!!!!!
+creTable();
+creFig(randomX(0, 6), 5, 15);
+
+let interv = setInterval(() => {
+  movDow();
+}, 1000);
+
+// __Слушатель движения_
 window.addEventListener("keydown", mover);
 
-// _____________________Слушатель рестарта_____________________
+// ___Слушатель рестарта_
 window.addEventListener("keydown", function (e) {
   if (e.code == "Enter") {
     recreator();
   }
 });
+
 
 /*
 
